@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("ADMIN")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Post {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  title         String
+  content       String
+  featuredImage String?
+  author        String
+  category      String?
+  published     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Agenda {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  location    String
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Teacher {
+  id        String   @id @default(cuid())
+  name      String
+  photo     String?
+  position  String
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String?
+  body      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Feature {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  icon        String   @default("BookOpen")
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Facility {
+  id          String   @id @default(cuid())
+  name        String
+  image       String
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SchoolProfile {
+  id               String   @id @default(cuid())
+  schoolName       String
+  logo             String?
+  vision           String?
+  mission          String?
+  history          String?
+  principalMessage String?
+  address          String?
+  phone            String?
+  email            String?
+  googleMapsUrl    String?
+  updatedAt        DateTime @updatedAt
+  ctaDescription   String?
+  ctaHeadline      String?
+  facebookUrl      String?
+  heroHeadline     String?
+  heroImage        String?
+  heroSubheadline  String?
+  instagramUrl     String?
+  officeHours      String?
+  twitterUrl       String?
+  youtubeUrl       String?
+}
