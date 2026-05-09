@@ -8,77 +8,130 @@ import { Calendar, User, ArrowRight, Search } from "lucide-react";
 import { Input } from "@/components/ui/Input";
 import { prisma } from "@/lib/prisma";
 import { formatDate, getDirectImageUrl } from "@/lib/utils";
+import { SearchInput } from "@/components/shared/SearchInput";
+import { Suspense } from "react";
+import { getServerTranslations } from "@/lib/i18n";
 
-export default async function NewsPage() {
+export default async function NewsPage(props: {
+    searchParams: Promise<{ q?: string }>;
+}) {
+    const { t } = await getServerTranslations();
+    const searchParams = await props.searchParams;
+    const query = searchParams.q || "";
+
     const posts = await prisma.post.findMany({
-        where: { published: true },
+        where: {
+            published: true,
+            OR: query ? [
+                { title: { contains: query, mode: "insensitive" } },
+                { content: { contains: query, mode: "insensitive" } },
+                { category: { contains: query, mode: "insensitive" } },
+            ] : undefined,
+        },
         orderBy: { createdAt: "desc" },
     });
 
     return (
-        <div className="container mx-auto px-4 py-32">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16">
-                <div>
-                    <h1 className="text-4xl md:text-6xl font-black mb-6 tracking-tight">School News</h1>
-                    <p className="text-xl text-muted-foreground max-w-2xl">
-                        Discover the latest stories, achievements, and updates from the EduCenter Academy community.
+        <div className="flex flex-col gap-32 pb-32 bg-white">
+            {/* Page Header */}
+            <section className="relative pt-60 pb-32 overflow-hidden bg-slate-50">
+                <div className="absolute inset-0 z-0">
+                    <Image
+                        src="https://images.unsplash.com/photo-1504173010664-32509aeebb62?auto=format&fit=crop&q=80&w=2000"
+                        alt="News Header"
+                        fill
+                        className="object-cover opacity-30 animate-ken-burns"
+                        unoptimized
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
+                </div>
+                <div className="container mx-auto px-4 relative z-10 text-center">
+                    <div className="inline-block px-6 py-2 rounded-full bg-primary/10 border border-primary/20 text-slate-900 text-[10px] font-black uppercase tracking-[0.4em] mb-8 animate-fade-in">
+                        {t("news.pageBadge")}
+                    </div>
+                    <h1 className="text-6xl md:text-9xl font-black mb-8 tracking-tighter text-slate-900 leading-none">
+                        {t("news.pageHeadline")}
+                    </h1>
+                    <p className="text-xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-medium leading-relaxed">
+                        {t("news.pageSubheadline")}
                     </p>
                 </div>
-                <div className="relative w-full md:w-80">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                    <Input placeholder="Search articles..." className="pl-10 h-12 rounded-full bg-accent/30 border-none" />
-                </div>
-            </div>
+            </section>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                {posts.map((post) => (
-                    <Link key={post.id} href={`/news/${post.slug}`} className="group h-full">
-                        <article className="flex flex-col h-full bg-card rounded-[2rem] overflow-hidden border shadow-sm group-hover:shadow-2xl group-hover:-translate-y-2 transition-all duration-500">
-                            <div className="relative h-64 w-full overflow-hidden">
-                                <Image
-                                    src={getDirectImageUrl(post.featuredImage) || "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=800"}
-                                    alt={post.title}
-                                    fill
-                                    className="object-cover group-hover:scale-110 transition-transform duration-700"
-                                    unoptimized
-                                />
-                                <div className="absolute top-6 left-6">
-                                    <span className="bg-white/95 dark:bg-black/95 backdrop-blur-md text-[10px] font-black uppercase tracking-widest px-4 py-2 rounded-full shadow-lg">
-                                        {post.category}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="p-10 flex flex-col flex-1">
-                                <div className="flex items-center gap-4 text-xs text-muted-foreground mb-6">
-                                    <div className="flex items-center gap-1.5">
-                                        <Calendar className="h-3.5 w-3.5" />
-                                        <span>{formatDate(post.createdAt)}</span>
+            <section className="container mx-auto px-4">
+                <div className="flex flex-col md:flex-row items-center justify-between mb-24 gap-12">
+                    <div className="flex-1">
+                        <div className="inline-block px-6 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-8">
+                            {t("news.archiveBadge")}
+                        </div>
+                        <h2 className="text-5xl md:text-[6rem] font-black mb-6 tracking-tighter text-slate-900 leading-[0.9]">
+                            {t("news.exploreHeadline")}
+                        </h2>
+                    </div>
+                    <div className="relative w-full md:w-96">
+                        <Suspense fallback={<div className="h-20 w-full animate-pulse bg-slate-100 rounded-3xl" />}>
+                            <SearchInput 
+                                placeholder={t("news.searchPlaceholder")} 
+                                className="h-20 px-8 rounded-3xl border-slate-200 focus:border-primary shadow-sm" 
+                            />
+                        </Suspense>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
+                    {posts.map((post) => (
+                        <Link key={post.id} href={`/news/${post.slug}`} className="group h-full">
+                            <article className="flex flex-col h-full bg-white rounded-[4.5rem] overflow-hidden border border-slate-100 shadow-xl hover:shadow-[0_40px_100px_rgba(0,0,0,0.08)] hover:-translate-y-4 transition-all duration-700">
+                                <div className="relative h-80 w-full overflow-hidden">
+                                    <Image
+                                        src={getDirectImageUrl(post.featuredImage) || "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=800"}
+                                        alt={post.title}
+                                        fill
+                                        className="object-cover group-hover:scale-110 transition-transform duration-1000"
+                                        unoptimized
+                                    />
+                                    <div className="absolute top-8 left-8">
+                                        <span className="bg-white/95 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl shadow-xl border border-white/50">
+                                            {post.category}
+                                        </span>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <User className="h-3.5 w-3.5" />
-                                        <span>{post.author}</span>
+                                </div>
+                                <div className="p-12 flex flex-col flex-1">
+                                    <div className="flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-10">
+                                        <div className="flex items-center gap-3">
+                                            <Calendar className="h-4 w-4" />
+                                            <span>{formatDate(post.createdAt)}</span>
+                                        </div>
+                                        <div className="flex items-center gap-3">
+                                            <User className="h-4 w-4" />
+                                            <span>{post.author}</span>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-3xl font-black mb-6 line-clamp-2 leading-tight group-hover:text-primary transition-colors text-slate-900">
+                                        {post.title}
+                                    </h3>
+                                    <p className="text-slate-500 font-medium leading-relaxed text-lg line-clamp-3 mb-10 flex-1">
+                                        {post.content}
+                                    </p>
+                                    <div className="flex items-center text-slate-900 font-black text-xs uppercase tracking-[0.3em] group-hover:text-primary transition-all">
+                                        {t("news.readFull")} <ArrowRight className="h-6 w-6 ml-4 group-hover:translate-x-3 transition-transform" />
                                     </div>
                                 </div>
-                                <h3 className="text-2xl font-bold mb-4 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
-                                    {post.title}
-                                </h3>
-                                <p className="text-muted-foreground leading-relaxed line-clamp-3 mb-8 flex-1">
-                                    {post.content}
-                                </p>
-                                <div className="flex items-center text-primary font-black text-sm uppercase tracking-wider gap-2">
-                                    Read Article <ArrowRight className="h-4 w-4 group-hover:translate-x-2 transition-transform" />
-                                </div>
-                            </div>
-                        </article>
-                    </Link>
-                ))}
+                            </article>
+                        </Link>
+                    ))}
+                </div>
+
                 {posts.length === 0 && (
-                    <div className="col-span-1 md:col-span-3 text-center py-32 bg-accent/20 rounded-[3rem] border-2 border-dashed">
-                        <h3 className="text-2xl font-bold text-muted-foreground">No news articles found</h3>
-                        <p className="text-muted-foreground mt-2">Check back later for more updates.</p>
+                    <div className="text-center py-48 bg-slate-50 rounded-[5rem] border-2 border-dashed border-slate-200">
+                        <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-12 shadow-xl border border-slate-100">
+                            <Search className="h-10 w-10 text-primary" />
+                        </div>
+                        <h3 className="text-4xl font-black text-slate-900 mb-6 tracking-tighter">{t("news.noArticles")}</h3>
+                        <p className="text-slate-500 text-xl font-medium">{t("news.noArticlesSub")}</p>
                     </div>
                 )}
-            </div>
+            </section>
         </div>
     );
 }

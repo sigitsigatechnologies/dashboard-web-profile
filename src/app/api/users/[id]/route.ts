@@ -6,7 +6,7 @@ import bcrypt from "bcryptjs";
 
 export async function PUT(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -17,7 +17,7 @@ export async function PUT(
     try {
         const body = await req.json();
         const { email, password, name, role } = body;
-        const id = params.id;
+        const { id } = await params;
 
         const updateData: any = {
             email,
@@ -47,7 +47,7 @@ export async function PUT(
 
 export async function DELETE(
     req: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     const session = await getServerSession(authOptions);
 
@@ -56,7 +56,7 @@ export async function DELETE(
     }
 
     try {
-        const id = params.id;
+        const { id } = await params;
 
         // Prevent admin from deleting themselves (optional but recommended)
         if (id === (session.user as any).id) {

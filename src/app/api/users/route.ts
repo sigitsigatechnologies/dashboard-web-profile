@@ -12,7 +12,16 @@ export async function GET(req: NextRequest) {
     }
 
     try {
+        const { searchParams } = new URL(req.url);
+        const query = searchParams.get("query");
+
         const users = await prisma.user.findMany({
+            where: query ? {
+                OR: [
+                    { name: { contains: query, mode: "insensitive" } },
+                    { email: { contains: query, mode: "insensitive" } },
+                ]
+            } : {},
             select: {
                 id: true,
                 email: true,

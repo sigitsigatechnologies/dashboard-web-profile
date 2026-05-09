@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Star, Plus, Trash2, Edit2, ImageIcon } from "lucide-react";
+import { Star, Plus, Trash2, Edit2, ImageIcon, Search } from "lucide-react";
 import toast from "react-hot-toast";
 import Image from "next/image";
 import { getDirectImageUrl } from "@/lib/utils";
@@ -28,6 +28,7 @@ export default function FacilitiesDashboard() {
         description: "",
         order: 0,
     });
+    const [query, setQuery] = useState("");
     const [uploading, setUploading] = useState(false);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +58,7 @@ export default function FacilitiesDashboard() {
 
     const fetchFacilities = async () => {
         try {
-            const response = await fetch("/api/facilities");
+            const response = await fetch(`/api/facilities?query=${query}`);
             const data = await response.json();
             setFacilities(data);
         } catch (error) {
@@ -69,7 +70,7 @@ export default function FacilitiesDashboard() {
 
     useEffect(() => {
         fetchFacilities();
-    }, []);
+    }, [query]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -122,6 +123,18 @@ export default function FacilitiesDashboard() {
                 <Button onClick={() => { setIsFormOpen(true); setEditingFacility(null); }} className="rounded-full shadow-lg">
                     <Plus className="mr-2 h-4 w-4" /> Add Facility
                 </Button>
+            </div>
+
+            <div className="flex items-center gap-4">
+                <div className="relative flex-1 max-w-sm">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        placeholder="Search facilities..."
+                        className="pl-9 rounded-xl"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                </div>
             </div>
 
             {isFormOpen && (

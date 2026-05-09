@@ -19,7 +19,7 @@ export default function UsersDashboardPage() {
     const fetchUsers = async () => {
         setLoading(true);
         try {
-            const response = await fetch("/api/users");
+            const response = await fetch(`/api/users?query=${query}`);
             const data = await response.json();
             if (response.ok) {
                 setUsers(data);
@@ -35,7 +35,7 @@ export default function UsersDashboardPage() {
 
     useEffect(() => {
         fetchUsers();
-    }, []);
+    }, [query]);
 
     const handleDelete = async (id: string) => {
         if (!confirm("Are you sure you want to delete this user?")) return;
@@ -54,10 +54,7 @@ export default function UsersDashboardPage() {
         }
     };
 
-    const filteredUsers = users.filter(user =>
-        user.name?.toLowerCase().includes(query.toLowerCase()) ||
-        user.email.toLowerCase().includes(query.toLowerCase())
-    );
+    const filteredUsers = users;
 
     return (
         <div className="space-y-6">

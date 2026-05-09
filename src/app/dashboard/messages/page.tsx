@@ -25,6 +25,24 @@ export default function MessagesPage() {
         }
     };
 
+    const markAsRead = async (id: string) => {
+        try {
+            await fetch(`/api/messages/${id}/read`, { method: "PUT" });
+            setMessages(prev => prev.map(msg => 
+                msg.id === id ? { ...msg, isRead: true } : msg
+            ));
+        } catch (error) {
+            console.error("Failed to mark as read:", error);
+        }
+    };
+
+    const handleSelectMessage = (msg: any) => {
+        setSelectedMessage(msg);
+        if (!msg.isRead) {
+            markAsRead(msg.id);
+        }
+    };
+
     useEffect(() => {
         fetchMessages();
     }, []);
@@ -48,15 +66,18 @@ export default function MessagesPage() {
                                 messages.map((msg) => (
                                     <button
                                         key={msg.id}
-                                        onClick={() => setSelectedMessage(msg)}
-                                        className={`flex flex-col gap-1 p-4 text-left border-b hover:bg-muted/50 transition-colors ${selectedMessage?.id === msg.id ? "bg-accent" : ""
-                                            }`}
+                                        onClick={() => handleSelectMessage(msg)}
+                                        className={`flex flex-col gap-1 p-4 text-left border-b hover:bg-muted/50 transition-colors relative ${selectedMessage?.id === msg.id ? "bg-accent" : ""
+                                            } ${!msg.isRead ? "bg-primary/5" : ""}`}
                                     >
                                         <div className="flex items-center justify-between">
-                                            <span className="font-semibold text-sm">{msg.name}</span>
+                                            <div className="flex items-center gap-2">
+                                                {!msg.isRead && <div className="h-2 w-2 rounded-full bg-primary shrink-0" />}
+                                                <span className={`text-sm ${!msg.isRead ? "font-bold" : "font-semibold"}`}>{msg.name}</span>
+                                            </div>
                                             <span className="text-[10px] text-muted-foreground">{formatDate(msg.createdAt)}</span>
                                         </div>
-                                        <span className="text-xs font-medium truncate">{msg.subject}</span>
+                                        <span className={`text-xs truncate ${!msg.isRead ? "font-semibold" : "font-medium"}`}>{msg.subject}</span>
                                         <span className="text-xs text-muted-foreground truncate">{msg.body}</span>
                                     </button>
                                 ))

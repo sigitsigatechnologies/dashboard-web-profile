@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Building2, Save, Globe, Info, Phone } from "lucide-react";
+import { Building2, Save, Globe, Info, Phone, X } from "lucide-react";
 import toast from "react-hot-toast";
 import { getDirectImageUrl } from "@/lib/utils";
 
@@ -26,6 +26,7 @@ export default function SchoolProfilePage() {
         heroHeadline: "",
         heroSubheadline: "",
         heroImage: "",
+        heroImages: [] as string[],
         ctaHeadline: "",
         ctaDescription: "",
         officeHours: "",
@@ -37,7 +38,7 @@ export default function SchoolProfilePage() {
 
     const [uploading, setUploading] = useState<{ [key: string]: boolean }>({});
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "logo" | "heroImage") => {
+    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "logo" | "heroImage" | "heroImages") => {
         const file = e.target.files?.[0];
         if (!file) return;
 
@@ -52,7 +53,11 @@ export default function SchoolProfilePage() {
             });
             const data = await response.json();
             if (data.url) {
-                setFormData(prev => ({ ...prev, [field]: data.url }));
+                if (field === "heroImages") {
+                    setFormData(prev => ({ ...prev, heroImages: [...prev.heroImages, data.url] }));
+                } else {
+                    setFormData(prev => ({ ...prev, [field]: data.url }));
+                }
                 toast.success(`${field} uploaded successfully`);
             }
         } catch (error) {
@@ -83,6 +88,7 @@ export default function SchoolProfilePage() {
                         heroHeadline: data.heroHeadline || "",
                         heroSubheadline: data.heroSubheadline || "",
                         heroImage: data.heroImage || "",
+                        heroImages: data.heroImages || [],
                         ctaHeadline: data.ctaHeadline || "",
                         ctaDescription: data.ctaDescription || "",
                         officeHours: data.officeHours || "",
@@ -212,35 +218,74 @@ export default function SchoolProfilePage() {
                                 onChange={(e) => setFormData({ ...formData, heroSubheadline: e.target.value })}
                             />
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">Hero Image</label>
-                                <div className="flex gap-2">
-                                    <Input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => handleFileUpload(e, "heroImage")}
-                                        className="rounded-xl flex-1"
-                                    />
-                                    {uploading.heroImage && <div className="flex items-center text-sm text-blue-600">Uploading...</div>}
+                        <div className="grid grid-cols-1 gap-6">
+                            <div className="space-y-4">
+                                <label className="text-sm font-bold text-slate-700">Hero Images (Slider)</label>
+                                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    {formData.heroImages.map((img, idx) => (
+                                        <div key={idx} className="relative aspect-video rounded-xl overflow-hidden border bg-slate-100 group">
+                                            <Image src={getDirectImageUrl(img)} alt={`Hero ${idx}`} fill className="object-cover" unoptimized />
+                                            <button 
+                                                type="button"
+                                                onClick={() => setFormData(prev => ({ 
+                                                    ...prev, 
+                                                    heroImages: prev.heroImages.filter((_, i) => i !== idx) 
+                                                }))}
+                                                className="absolute top-2 right-2 bg-red-500 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X className="h-4 w-4" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <label className="relative aspect-video rounded-xl border-2 border-dashed border-slate-300 flex flex-col items-center justify-center hover:border-primary hover:bg-slate-50 cursor-pointer transition-all">
+                                        <Globe className="h-6 w-6 text-slate-400 mb-2" />
+                                        <span className="text-xs font-bold text-slate-500">Add Image</span>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) => handleFileUpload(e, "heroImages")}
+                                        />
+                                        {uploading.heroImages && (
+                                            <div className="absolute inset-0 bg-white/80 flex items-center justify-center rounded-xl">
+                                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent"></div>
+                                            </div>
+                                        )}
+                                    </label>
                                 </div>
-                                <Input
-                                    value={formData.heroImage}
-                                    onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
-                                    className="rounded-xl"
-                                    placeholder="Or enter hero image URL..."
-                                />
-                                <div className="mt-2 h-32 w-full border bg-slate-50 overflow-hidden relative">
-                                    <Image src={getDirectImageUrl(formData.heroImage)} alt="Hero Preview" fill className="object-cover" unoptimized />
-                                </div>
+                                <p className="text-xs text-slate-500 font-medium">These images will cycle in the homepage hero slider.</p>
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-bold text-slate-700">CTA Headline</label>
-                                <Input
-                                    value={formData.ctaHeadline}
-                                    onChange={(e) => setFormData({ ...formData, ctaHeadline: e.target.value })}
-                                    className="rounded-xl"
-                                />
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-slate-700">Primary Hero Image (Fallback)</label>
+                                    <div className="flex gap-2">
+                                        <Input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={(e) => handleFileUpload(e, "heroImage")}
+                                            className="rounded-xl flex-1"
+                                        />
+                                        {uploading.heroImage && <div className="flex items-center text-sm text-blue-600">Uploading...</div>}
+                                    </div>
+                                    <Input
+                                        value={formData.heroImage}
+                                        onChange={(e) => setFormData({ ...formData, heroImage: e.target.value })}
+                                        className="rounded-xl"
+                                        placeholder="Or enter hero image URL..."
+                                    />
+                                    <div className="mt-2 h-32 w-full border bg-slate-50 rounded-xl overflow-hidden relative">
+                                        <Image src={getDirectImageUrl(formData.heroImage)} alt="Hero Preview" fill className="object-cover" unoptimized />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-sm font-bold text-slate-700">CTA Headline</label>
+                                    <Input
+                                        value={formData.ctaHeadline}
+                                        onChange={(e) => setFormData({ ...formData, ctaHeadline: e.target.value })}
+                                        className="rounded-xl"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </CardContent>

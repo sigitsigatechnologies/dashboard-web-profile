@@ -3,9 +3,18 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
+        const { searchParams } = new URL(request.url);
+        const query = searchParams.get("query");
+
         const features = await prisma.feature.findMany({
+            where: query ? {
+                OR: [
+                    { title: { contains: query, mode: "insensitive" } },
+                    { description: { contains: query, mode: "insensitive" } },
+                ]
+            } : {},
             orderBy: { order: "asc" },
         });
         return NextResponse.json(features);

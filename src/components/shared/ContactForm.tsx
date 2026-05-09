@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { Send } from "lucide-react";
 import toast from "react-hot-toast";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function ContactForm() {
+    const { t } = useLanguage();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         name: "",
@@ -29,10 +31,10 @@ export function ContactForm() {
 
             if (!response.ok) throw new Error("Failed to send message");
 
-            toast.success("Message sent successfully! We will get back to you soon.");
+            toast.success(t("contact.success") || "Message sent successfully!");
             setFormData({ name: "", email: "", phone: "", subject: "", body: "" });
         } catch (error) {
-            toast.error("Failed to send message. Please try again later.");
+            toast.error(t("contact.error") || "Failed to send message.");
         } finally {
             setLoading(false);
         }
@@ -44,47 +46,70 @@ export function ContactForm() {
     };
 
     return (
-        <Card className="shadow-xl">
-            <CardContent className="p-8">
-                <h3 className="text-2xl font-bold mb-6">Send us a Message</h3>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Full Name</label>
-                            <Input id="name" value={formData.name} onChange={handleChange} placeholder="Enter your name" required />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Email Address</label>
-                            <Input id="email" type="email" value={formData.email} onChange={handleChange} placeholder="Enter your email" required />
-                        </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Phone Number</label>
-                            <Input id="phone" value={formData.phone} onChange={handleChange} placeholder="Enter your phone" />
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium">Subject</label>
-                            <Input id="subject" value={formData.subject} onChange={handleChange} placeholder="Message subject" required />
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium">Message</label>
-                        <textarea
-                            id="body"
-                            value={formData.body}
-                            onChange={handleChange}
-                            className="flex min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            placeholder="Type your message here..."
-                            required
-                        ></textarea>
-                    </div>
-                    <Button type="submit" size="lg" className="w-full md:w-auto px-10" disabled={loading}>
-                        {loading ? "Sending..." : "Send Message"}
-                        <Send className="ml-2 h-4 w-4" />
-                    </Button>
-                </form>
-            </CardContent>
-        </Card>
+        <form onSubmit={handleSubmit} className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.name")}</label>
+                    <Input 
+                        id="name" 
+                        value={formData.name} 
+                        onChange={handleChange} 
+                        placeholder="e.g. Alexander Graham" 
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        required 
+                    />
+                </div>
+                <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.email")}</label>
+                    <Input 
+                        id="email" 
+                        type="email" 
+                        value={formData.email} 
+                        onChange={handleChange} 
+                        placeholder="name@email.com" 
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        required 
+                    />
+                </div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">Phone Number</label>
+                    <Input 
+                        id="phone" 
+                        value={formData.phone} 
+                        onChange={handleChange} 
+                        placeholder="+1 (555) 000-0000" 
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                    />
+                </div>
+                <div className="space-y-4">
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.subject")}</label>
+                    <Input 
+                        id="subject" 
+                        value={formData.subject} 
+                        onChange={handleChange} 
+                        placeholder="How can we help?" 
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        required 
+                    />
+                </div>
+            </div>
+            <div className="space-y-4">
+                <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.message")}</label>
+                <textarea
+                    id="body"
+                    value={formData.body}
+                    onChange={handleChange}
+                    className="flex min-h-[250px] w-full rounded-[2rem] border-2 border-slate-100 bg-white px-8 py-6 text-lg font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10 transition-all text-slate-900"
+                    placeholder="Describe your inquiry in detail..."
+                    required
+                ></textarea>
+            </div>
+            <Button type="submit" size="lg" className="w-full h-24 rounded-[2.5rem] text-2xl font-black shadow-2xl shadow-primary/20 group bg-slate-900 text-white hover:bg-primary hover:text-slate-900 transition-all duration-500" disabled={loading}>
+                {loading ? t("common.loading") : t("contact.form.send")}
+                <Send className="ml-6 h-8 w-8 group-hover:translate-x-3 group-hover:-translate-y-3 transition-transform" />
+            </Button>
+        </form>
     );
 }

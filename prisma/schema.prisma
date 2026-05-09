@@ -100,6 +100,7 @@ model SchoolProfile {
   facebookUrl      String?
   heroHeadline     String?
   heroImage        String?
+  heroImages       String[] @default([])
   heroSubheadline  String?
   instagramUrl     String?
   officeHours      String?

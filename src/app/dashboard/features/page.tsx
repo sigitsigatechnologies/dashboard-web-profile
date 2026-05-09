@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { Trophy, Plus, Trash2, Edit2, GripVertical } from "lucide-react";
+import * as LucideIcons from "lucide-react";
+import { Plus, Trash2, Edit2, Search } from "lucide-react";
 import toast from "react-hot-toast";
 
 interface Feature {
@@ -26,10 +27,11 @@ export default function FeaturesDashboard() {
         icon: "BookOpen",
         order: 0,
     });
+    const [query, setQuery] = useState("");
 
     const fetchFeatures = async () => {
         try {
-            const response = await fetch("/api/features");
+            const response = await fetch(`/api/features?query=${query}`);
             const data = await response.json();
             setFeatures(data);
         } catch (error) {
@@ -41,7 +43,7 @@ export default function FeaturesDashboard() {
 
     useEffect(() => {
         fetchFeatures();
-    }, []);
+    }, [query]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -96,6 +98,18 @@ export default function FeaturesDashboard() {
                 </Button>
             </div>
 
+            <div className="flex items-center gap-4">
+                <div className="relative flex-1 max-w-sm">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input
+                        placeholder="Search features..."
+                        className="pl-9 rounded-xl"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                    />
+                </div>
+            </div>
+
             {isFormOpen && (
                 <Card className="border-none shadow-xl ring-1 ring-blue-100 bg-card">
                     <CardHeader>
@@ -147,7 +161,10 @@ export default function FeaturesDashboard() {
                             <div className="flex items-start justify-between">
                                 <div className="flex gap-4">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                                        <Trophy className="h-6 w-6" />
+                                        {(() => {
+                                            const Icon = (LucideIcons as any)[feature.icon] || LucideIcons.BookOpen;
+                                            return <Icon className="h-6 w-6" />;
+                                        })()}
                                     </div>
                                     <div>
                                         <h3 className="font-black text-lg text-slate-800">{feature.title}</h3>

@@ -3,8 +3,10 @@ import { School, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } fr
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import { getDirectImageUrl } from "@/lib/utils";
+import { getServerTranslations } from "@/lib/i18n";
 
 export async function Footer() {
+    const { t } = await getServerTranslations();
     const profile: any = await prisma.schoolProfile.findFirst();
 
     const socialLinks = [
@@ -15,58 +17,68 @@ export async function Footer() {
     ];
 
     return (
-        <footer className="border-t bg-slate-50/50 dark:bg-slate-900/50">
-            <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-                    <div className="col-span-1 md:col-span-1">
-                        <Link href="/" className="flex items-center space-x-2">
-                            {profile?.logo ? (
-                                <Image
-                                    src={getDirectImageUrl(profile.logo)}
-                                    alt={profile.schoolName}
-                                    width={48}
-                                    height={48}
-                                    className="h-12 w-auto object-contain"
-                                    unoptimized
-                                />
-                            ) : (
-                                <School className="h-10 w-10 text-blue-600" />
-                            )}
-                            <span className="text-2xl font-black tracking-tight text-slate-900">{profile?.schoolName || "EduCenter"}</span>
+        <footer className="border-t bg-slate-50 pt-32 pb-16">
+            <div className="container mx-auto px-4">
+                <div className="grid grid-cols-1 lg:grid-cols-4 gap-16 lg:gap-24">
+                    <div className="col-span-1 lg:col-span-1">
+                        <Link href="/" className="flex items-center space-x-4 group">
+                            <div className="bg-white p-3 rounded-2xl group-hover:scale-110 transition-transform shadow-sm border border-slate-100">
+                                {profile?.logo ? (
+                                    <Image
+                                        src={getDirectImageUrl(profile.logo)}
+                                        alt={profile.schoolName}
+                                        width={48}
+                                        height={48}
+                                        className="h-12 w-auto object-contain"
+                                        unoptimized
+                                    />
+                                ) : (
+                                    <School className="h-10 w-10 text-primary" />
+                                )}
+                            </div>
+                            <span className="text-3xl font-black tracking-tighter font-heading text-slate-900">
+                                {profile?.schoolName || "EduCenter"}
+                            </span>
                         </Link>
-                        <p className="mt-6 text-sm text-slate-500 leading-relaxed font-medium">
-                            {profile?.vision || "Providing quality education for a brighter future. Empowering students to achieve excellence and become leaders of tomorrow."}
+                        <p className="mt-10 text-lg text-slate-500 leading-relaxed font-medium max-w-sm">
+                            {profile?.vision || "Empowering the next generation with world-class education and values-driven learning experiences."}
                         </p>
                     </div>
                     <div>
-                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Quick Navigation</h3>
-                        <ul className="mt-6 space-y-4">
-                            <li><Link href="/profile" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Our Identity</Link></li>
-                            <li><Link href="/news" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">News & Updates</Link></li>
-                            <li><Link href="/agenda" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">School Calendar</Link></li>
-                            <li><Link href="/contact" className="text-sm font-bold text-slate-600 hover:text-blue-600 transition-colors">Get in Touch</Link></li>
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-10">{t("nav.dashboard")}</h3>
+                        <ul className="space-y-6">
+                            <li><Link href="/profile" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.facilities")}</Link></li>
+                            <li><Link href="/news" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.news")}</Link></li>
+                            <li><Link href="/agenda" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.agenda")}</Link></li>
+                            <li><Link href="/contact" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.contact")}</Link></li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Contact Details</h3>
-                        <ul className="mt-6 space-y-4">
-                            <li className="flex items-start space-x-3 text-sm font-medium text-slate-600">
-                                <MapPin className="h-5 w-5 text-blue-600 shrink-0 mt-0.5" />
-                                <span>{profile?.address || "123 School Street, Education City"}</span>
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-10">{t("contact.info.title")}</h3>
+                        <ul className="space-y-8">
+                            <li className="flex items-start space-x-5 text-base font-medium text-slate-500">
+                                <div className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                                    <MapPin className="h-5 w-5 text-primary shrink-0" />
+                                </div>
+                                <span className="leading-relaxed">{profile?.address || "123 School Street, Education City"}</span>
                             </li>
-                            <li className="flex items-center space-x-3 text-sm font-medium text-slate-600">
-                                <Phone className="h-5 w-5 text-blue-600 shrink-0" />
+                            <li className="flex items-center space-x-5 text-base font-medium text-slate-500">
+                                <div className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                                    <Phone className="h-5 w-5 text-primary shrink-0" />
+                                </div>
                                 <span>{profile?.phone || "+1 (234) 567-890"}</span>
                             </li>
-                            <li className="flex items-center space-x-3 text-sm font-medium text-slate-600">
-                                <Mail className="h-5 w-5 text-blue-600 shrink-0" />
+                            <li className="flex items-center space-x-5 text-base font-medium text-slate-500">
+                                <div className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                                    <Mail className="h-5 w-5 text-primary shrink-0" />
+                                </div>
                                 <span>{profile?.email || "info@educenter.sch.id"}</span>
                             </li>
                         </ul>
                     </div>
                     <div>
-                        <h3 className="text-xs font-black uppercase tracking-[0.2em] text-blue-600">Digital Presence</h3>
-                        <div className="mt-6 flex space-x-4">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-10">Stay Connected</h3>
+                        <div className="flex flex-wrap gap-4">
                             {socialLinks.map((social, i) => {
                                 const Icon = social.icon;
                                 return (
@@ -75,19 +87,23 @@ export async function Footer() {
                                         href={social.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-3 rounded-2xl bg-white border border-slate-100 text-slate-600 hover:text-blue-600 hover:border-blue-100 hover:shadow-lg transition-all"
+                                        className="p-4 rounded-2xl bg-white border border-slate-100 text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-xl hover:-translate-y-2 transition-all duration-500"
                                     >
-                                        <Icon className="h-5 w-5" />
+                                        <Icon className="h-6 w-6" />
                                     </Link>
                                 );
                             })}
                         </div>
                     </div>
                 </div>
-                <div className="mt-16 pt-8 border-t border-slate-100 text-center">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        &copy; {new Date().getFullYear()} {profile?.schoolName || "EduCenter"}. All rights Reserved.
+                <div className="mt-32 pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">
+                        &copy; {new Date().getFullYear()} {profile?.schoolName || "EduCenter"}. {t("footer.rights")}.
                     </p>
+                    <div className="flex items-center space-x-12">
+                        <Link href="/privacy" className="text-[10px] font-black text-slate-400 hover:text-primary uppercase tracking-[0.4em] transition-all">Privacy Policy</Link>
+                        <Link href="/terms" className="text-[10px] font-black text-slate-400 hover:text-primary uppercase tracking-[0.4em] transition-all">Terms of Use</Link>
+                    </div>
                 </div>
             </div>
         </footer>
