@@ -65,14 +65,14 @@ export function Navbar({ profile }: { profile: any }) {
                             </span>
                         </Link>
                     </div>
-                    <div className="hidden lg:block">
-                        <div className="flex items-center space-x-2">
+                    <div className="hidden xl:block">
+                        <div className="flex items-center space-x-1">
                             {navigation.map((item) => (
                                 <Link
                                     key={item.nameKey}
                                     href={item.href}
                                     className={cn(
-                                        "px-7 py-3 rounded-2xl text-[13px] font-black uppercase tracking-[0.2em] transition-all duration-500 font-heading",
+                                        "px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all duration-500 font-heading whitespace-nowrap",
                                         pathname === item.href
                                             ? "bg-primary text-slate-900 shadow-2xl shadow-primary/30"
                                             : "text-slate-600 hover:text-slate-900 hover:bg-white/50"
@@ -105,7 +105,7 @@ export function Navbar({ profile }: { profile: any }) {
                             </div>
                         </div>
                     </div>
-                    <div className="lg:hidden">
+                    <div className="xl:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className={cn(
