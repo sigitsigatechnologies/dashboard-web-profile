@@ -64,8 +64,8 @@ export default async function AgendaPage(props: {
                     <div className="relative w-full md:w-96">
                         <Suspense fallback={<div className="h-20 w-full animate-pulse bg-slate-100 rounded-3xl" />}>
                             <SearchInput 
-                                placeholder="Search events..." 
-                                className="h-20 px-8 rounded-3xl border-slate-200 focus:border-primary shadow-sm" 
+                                placeholder="Cari acara atau lokasi..." 
+                                className="h-20 w-full" 
                             />
                         </Suspense>
                     </div>
