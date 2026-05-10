@@ -89,9 +89,19 @@ export default async function ContactPage() {
                             </div>
                         </div>
 
-                        <div className="h-[500px] rounded-[5rem] overflow-hidden border-[12px] border-white shadow-[0_60px_120px_rgba(0,0,0,0.1)] group">
+                        <div className="h-[500px] rounded-[5rem] overflow-hidden border-[12px] border-white shadow-[0_60px_120px_rgba(0,0,0,0.1)] group relative">
+                            {!profile?.googleMapsUrl || !profile.googleMapsUrl.includes("embed") ? (
+                                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-100 text-center p-8">
+                                    <MapPin className="h-16 w-16 text-slate-400 mb-4" />
+                                    <h3 className="text-xl font-bold text-slate-900 mb-2">Peta Tidak Valid</h3>
+                                    <p className="text-slate-500 font-medium">
+                                        URL Google Maps yang dimasukkan di Dashboard bukan URL Embed. <br/>
+                                        Harap gunakan fitur "Bagikan" &gt; "Sematkan Peta" (Embed a map) di Google Maps dan salin HTML-nya.
+                                    </p>
+                                </div>
+                            ) : null}
                             <iframe
-                                src={profile?.googleMapsUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.039237691!2d106.816666!3d-6.19!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e3ecb1%3A0x600f6b4020a5948a!2sJakarta%20Pusat%2C%20Kota%20Jakarta%20Pusat%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1650000000000!5m2!1sid!2sid"}
+                                src={profile?.googleMapsUrl?.includes("embed") ? profile.googleMapsUrl : "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15865.039237691!2d106.816666!3d-6.19!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f3e945e3ecb1%3A0x600f6b4020a5948a!2sJakarta%20Pusat%2C%20Kota%20Jakarta%20Pusat%2C%20Daerah%20Khusus%20Ibukota%20Jakarta!5e0!3m2!1sid!2sid!4v1650000000000!5m2!1sid!2sid"}
                                 width="100%"
                                 height="100%"
                                 style={{ border: 0 }}
@@ -99,7 +109,7 @@ export default async function ContactPage() {
                                 loading="lazy"
                                 referrerPolicy="no-referrer-when-downgrade"
                                 title="Google Maps"
-                                className="group-hover:scale-110 transition-transform duration-1000"
+                                className="group-hover:scale-105 transition-transform duration-1000 absolute inset-0"
                             ></iframe>
                         </div>
                     </div>
