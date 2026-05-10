@@ -1,43 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
-import { v4 as uuidv4 } from "uuid";
 
+// This route is now legacy because we switched to Base64 uploads to support Vercel's read-only filesystem.
 export async function POST(req: NextRequest) {
-    try {
-        const formData = await req.formData();
-        const file = formData.get("file") as File | null;
-
-        if (!file) {
-            return NextResponse.json({ error: "No file uploaded" }, { status: 400 });
-        }
-
-        const bytes = await file.arrayBuffer();
-        const buffer = Buffer.from(bytes);
-
-        // Create unique filename
-        const ext = path.extname(file.name);
-        const filename = `${uuidv4()}${ext}`;
-
-        // Ensure relative path for browser storage
-        const publicPath = "/uploads";
-        const uploadDir = path.join(process.cwd(), "public", publicPath);
-
-        // Ensure directory exists
-        try {
-            await mkdir(uploadDir, { recursive: true });
-        } catch (err) {
-            // Directory might already exist
-        }
-
-        const filePath = path.join(uploadDir, filename);
-        await writeFile(filePath, buffer);
-
-        const fileUrl = `${publicPath}/${filename}`;
-
-        return NextResponse.json({ url: fileUrl });
-    } catch (error) {
-        console.error("Upload error:", error);
-        return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
-    }
+    return NextResponse.json({ 
+        error: "Direct file uploads are disabled in production. Please use Base64 conversion on the client side.",
+        message: "The application has been updated to use Base64 strings stored directly in the database."
+    }, { status: 400 });
 }

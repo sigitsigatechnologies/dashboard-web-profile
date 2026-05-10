@@ -35,25 +35,25 @@ export default function FacilitiesDashboard() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setUploading(true);
-        const uploadFormData = new FormData();
-        uploadFormData.append("file", file);
-
-        try {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: uploadFormData,
-            });
-            const data = await response.json();
-            if (data.url) {
-                setFormData(prev => ({ ...prev, image: data.url }));
-            }
-        } catch (error) {
-            console.error("Upload failed:", error);
-            toast.error("Upload failed");
-        } finally {
-            setUploading(false);
+        // Limit size to 1MB for Base64 stability in DB
+        if (file.size > 1024 * 1024) {
+            toast.error("File too large. Please use an image under 1MB.");
+            return;
         }
+
+        setUploading(true);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result as string;
+            setFormData(prev => ({ ...prev, image: base64String }));
+            setUploading(false);
+            toast.success("Image ready as Base64");
+        };
+        reader.onerror = () => {
+            toast.error("Failed to read image");
+            setUploading(false);
+        };
+        reader.readAsDataURL(file);
     };
 
     const fetchFacilities = async () => {

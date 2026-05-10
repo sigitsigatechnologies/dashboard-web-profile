@@ -42,30 +42,29 @@ export default function SchoolProfilePage() {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setUploading(prev => ({ ...prev, [field]: true }));
-        const uploadFormData = new FormData();
-        uploadFormData.append("file", file);
-
-        try {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: uploadFormData,
-            });
-            const data = await response.json();
-            if (data.url) {
-                if (field === "heroImages") {
-                    setFormData(prev => ({ ...prev, heroImages: [...prev.heroImages, data.url] }));
-                } else {
-                    setFormData(prev => ({ ...prev, [field]: data.url }));
-                }
-                toast.success(`${field} uploaded successfully`);
-            }
-        } catch (error) {
-            console.error("Upload failed:", error);
-            toast.error(`Failed to upload ${field}`);
-        } finally {
-            setUploading(prev => ({ ...prev, [field]: false }));
+        // Limit size to 1MB for Base64 stability in DB
+        if (file.size > 1024 * 1024) {
+            toast.error("File too large. Please use an image under 1MB.");
+            return;
         }
+
+        setUploading(prev => ({ ...prev, [field]: true }));
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result as string;
+            if (field === "heroImages") {
+                setFormData(prev => ({ ...prev, heroImages: [...prev.heroImages, base64String] }));
+            } else {
+                setFormData(prev => ({ ...prev, [field]: base64String }));
+            }
+            setUploading(prev => ({ ...prev, [field]: false }));
+            toast.success(`${field} ready as Base64`);
+        };
+        reader.onerror = () => {
+            toast.error(`Failed to read ${field}`);
+            setUploading(prev => ({ ...prev, [field]: false }));
+        };
+        reader.readAsDataURL(file);
     };
 
     useEffect(() => {
