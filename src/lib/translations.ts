@@ -3,6 +3,7 @@ export type Language = 'id' | 'en';
 export const translations = {
     id: {
         "nav.home": "Beranda",
+        "nav.profile": "Profil",
         "nav.agenda": "Agenda",
         "nav.facilities": "Fasilitas",
         "nav.teachers": "Guru",
@@ -87,6 +88,7 @@ export const translations = {
     },
     en: {
         "nav.home": "Home",
+        "nav.profile": "Profile",
         "nav.agenda": "Agenda",
         "nav.facilities": "Facilities",
         "nav.teachers": "Teachers",

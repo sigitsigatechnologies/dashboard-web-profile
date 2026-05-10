@@ -21,6 +21,13 @@ export default async function HomePage() {
         orderBy: { date: "desc" },
         take: 3,
     });
+    const facilitiesList = await prisma.facility.findMany({
+        orderBy: { order: "asc" },
+        take: 4,
+    });
+    const teachersList = await prisma.teacher.findMany({
+        take: 4,
+    });
 
     return (
         <div className="flex flex-col bg-white">
@@ -173,6 +180,84 @@ export default async function HomePage() {
                     )}
                 </div>
             </section>
+
+            {/* Facilities Preview Section */}
+            {facilitiesList.length > 0 && (
+                <section className="bg-slate-900 py-32 text-white overflow-hidden">
+                    <div className="container mx-auto px-6">
+                        <div className="flex flex-col md:flex-row items-end justify-between mb-20 gap-8">
+                            <div>
+                                <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white">
+                                    {t("facilities.title") || "Fasilitas Unggulan"}
+                                </h2>
+                                <p className="text-slate-400 mt-4 text-lg max-w-2xl">
+                                    Lingkungan belajar modern yang dirancang untuk mendukung setiap aspek perkembangan siswa.
+                                </p>
+                            </div>
+                            <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-white hover:text-slate-900 rounded-full px-8" asChild>
+                                <Link href="/facilities">Lihat Semua Fasilitas</Link>
+                            </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {facilitiesList.map((facility) => (
+                                <div key={facility.id} className="group relative rounded-3xl overflow-hidden aspect-[4/5]">
+                                    <Image 
+                                        src={getDirectImageUrl(facility.image)} 
+                                        alt={facility.name} 
+                                        fill 
+                                        className="object-cover group-hover:scale-110 transition-transform duration-700" 
+                                        unoptimized
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                                    <div className="absolute bottom-0 left-0 p-8 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                                        <h3 className="text-2xl font-black text-white mb-2">{facility.name}</h3>
+                                        <div className="h-1 w-12 bg-primary rounded-full group-hover:w-full transition-all duration-500" />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+            )}
+
+            {/* Teachers Preview Section */}
+            {teachersList.length > 0 && (
+                <section className="py-32 bg-white">
+                    <div className="container mx-auto px-6">
+                        <div className="text-center mb-20">
+                            <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-slate-900">
+                                {t("teachers.title") || "Tenaga Pengajar"}
+                            </h2>
+                            <p className="text-slate-500 mt-4 text-lg max-w-2xl mx-auto">
+                                Dididik oleh para ahli dan profesional yang berdedikasi tinggi terhadap masa depan siswa.
+                            </p>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                            {teachersList.map((teacher) => (
+                                <div key={teacher.id} className="group text-center">
+                                    <div className="relative w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-50 shadow-xl group-hover:border-primary transition-colors duration-500">
+                                        <Image 
+                                            src={getDirectImageUrl(teacher.photo)} 
+                                            alt={teacher.name} 
+                                            fill 
+                                            className="object-cover group-hover:scale-110 transition-transform duration-500" 
+                                            unoptimized
+                                        />
+                                    </div>
+                                    <h3 className="text-2xl font-black text-slate-900">{teacher.name}</h3>
+                                    <p className="text-primary font-bold text-sm uppercase tracking-widest mt-2 mb-4">{teacher.position}</p>
+                                    <p className="text-slate-500 text-sm line-clamp-3 px-4">{teacher.bio}</p>
+                                </div>
+                            ))}
+                        </div>
+                        <div className="text-center mt-16">
+                            <Button size="lg" className="bg-slate-100 text-slate-900 hover:bg-primary hover:text-slate-900 rounded-full px-12 font-bold shadow-sm" asChild>
+                                <Link href="/teachers">Profil Seluruh Guru</Link>
+                            </Button>
+                        </div>
+                    </div>
+                </section>
+            )}
 
             {/* News Section */}
             <section className="bg-slate-50 py-40">

@@ -11,6 +11,9 @@ import { useLanguage } from "@/context/LanguageContext";
 
 const navigation = [
     { nameKey: "nav.home", href: "/" },
+    { nameKey: "nav.profile", href: "/profile" },
+    { nameKey: "nav.facilities", href: "/facilities" },
+    { nameKey: "nav.teachers", href: "/teachers" },
     { nameKey: "nav.news", href: "/news" },
     { nameKey: "nav.agenda", href: "/agenda" },
     { nameKey: "nav.contact", href: "/contact" },
