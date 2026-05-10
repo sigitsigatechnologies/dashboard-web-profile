@@ -30,25 +30,24 @@ export function PostForm({ initialData, onSuccess, onCancel }: PostFormProps) {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setUploading(true);
-        const uploadFormData = new FormData();
-        uploadFormData.append("file", file);
-
-        try {
-            const response = await fetch("/api/upload", {
-                method: "POST",
-                body: uploadFormData,
-            });
-            const data = await response.json();
-            if (data.url) {
-                setFormData(prev => ({ ...prev, featuredImage: data.url }));
-            }
-        } catch (error) {
-            console.error("Upload failed:", error);
-            alert("Upload failed");
-        } finally {
-            setUploading(false);
+        // Limit size to 1MB for Base64 stability in DB
+        if (file.size > 1024 * 1024) {
+            alert("File too large. Please use an image under 1MB.");
+            return;
         }
+
+        setUploading(true);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            const base64String = reader.result as string;
+            setFormData(prev => ({ ...prev, featuredImage: base64String }));
+            setUploading(false);
+        };
+        reader.onerror = () => {
+            alert("Failed to read file");
+            setUploading(false);
+        };
+        reader.readAsDataURL(file);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
