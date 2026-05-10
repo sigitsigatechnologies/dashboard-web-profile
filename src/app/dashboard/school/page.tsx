@@ -316,6 +316,22 @@ export default function SchoolProfilePage() {
                             <label className="text-sm font-bold text-slate-700">Address</label>
                             <Input value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} className="rounded-xl" />
                         </div>
+                        <div className="space-y-2">
+                            <label className="text-sm font-bold text-slate-700">Google Maps Embed URL</label>
+                            <Input 
+                                value={formData.googleMapsUrl} 
+                                onChange={(e) => {
+                                    // Auto-extract src if user pastes whole iframe
+                                    let val = e.target.value;
+                                    const match = val.match(/src="([^"]+)"/);
+                                    if (match) val = match[1];
+                                    setFormData({ ...formData, googleMapsUrl: val });
+                                }} 
+                                className="rounded-xl" 
+                                placeholder="Paste Google Maps iframe or src URL here..."
+                            />
+                            <p className="text-xs text-slate-500 font-medium">Go to Google Maps &gt; Share &gt; Embed a map &gt; Copy HTML and paste it here.</p>
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <label className="text-sm font-bold text-slate-700">Facebook URL</label>
