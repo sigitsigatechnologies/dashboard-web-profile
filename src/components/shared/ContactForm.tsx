@@ -49,64 +49,64 @@ export function ContactForm() {
         <form onSubmit={handleSubmit} className="space-y-12">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
-                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.name")}</label>
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white ml-1">{t("contact.form.name")}</label>
                     <Input 
                         id="name" 
                         value={formData.name} 
                         onChange={handleChange} 
                         placeholder="e.g. Alexander Graham" 
-                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white dark:bg-slate-950 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900 dark:text-white"
                         required 
                     />
                 </div>
                 <div className="space-y-4">
-                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.email")}</label>
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white ml-1">{t("contact.form.email")}</label>
                     <Input 
                         id="email" 
                         type="email" 
                         value={formData.email} 
                         onChange={handleChange} 
                         placeholder="name@email.com" 
-                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white dark:bg-slate-950 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900 dark:text-white"
                         required 
                     />
                 </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
-                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">Phone Number</label>
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white ml-1">Phone Number</label>
                     <Input 
                         id="phone" 
                         value={formData.phone} 
                         onChange={handleChange} 
                         placeholder="+1 (555) 000-0000" 
-                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white dark:bg-slate-950 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900 dark:text-white"
                     />
                 </div>
                 <div className="space-y-4">
-                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.subject")}</label>
+                    <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white ml-1">{t("contact.form.subject")}</label>
                     <Input 
                         id="subject" 
                         value={formData.subject} 
                         onChange={handleChange} 
                         placeholder="How can we help?" 
-                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900"
+                        className="h-16 px-8 rounded-2xl border-2 border-slate-100 bg-white dark:bg-slate-950 focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all text-lg font-medium text-slate-900 dark:text-white"
                         required 
                     />
                 </div>
             </div>
             <div className="space-y-4">
-                <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 ml-1">{t("contact.form.message")}</label>
+                <label className="text-xs font-black uppercase tracking-[0.3em] text-slate-900 dark:text-white ml-1">{t("contact.form.message")}</label>
                 <textarea
                     id="body"
                     value={formData.body}
                     onChange={handleChange}
-                    className="flex min-h-[250px] w-full rounded-[2rem] border-2 border-slate-100 bg-white px-8 py-6 text-lg font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10 transition-all text-slate-900"
+                    className="flex min-h-[250px] w-full rounded-[2rem] border-2 border-slate-100 bg-white dark:bg-slate-950 px-8 py-6 text-lg font-medium placeholder:text-slate-400 focus-visible:outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/10 transition-all text-slate-900 dark:text-white"
                     placeholder="Describe your inquiry in detail..."
                     required
                 ></textarea>
             </div>
-            <Button type="submit" size="lg" className="w-full h-24 rounded-[2.5rem] text-2xl font-black shadow-2xl shadow-primary/20 group bg-slate-900 text-white hover:bg-primary hover:text-slate-900 transition-all duration-500" disabled={loading}>
+            <Button type="submit" size="lg" className="w-full h-24 rounded-[2.5rem] text-2xl font-black shadow-2xl shadow-primary/20 group bg-slate-900 text-white hover:bg-primary hover:text-slate-900 dark:text-white transition-all duration-500" disabled={loading}>
                 {loading ? t("common.loading") : t("contact.form.send")}
                 <Send className="ml-6 h-8 w-8 group-hover:translate-x-3 group-hover:-translate-y-3 transition-transform" />
             </Button>

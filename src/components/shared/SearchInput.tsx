@@ -58,7 +58,7 @@ export function SearchInput({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 placeholder={placeholder}
-                className="w-full h-full pl-16 pr-6 rounded-[2rem] border-2 border-slate-100 bg-white focus:border-primary transition-all text-lg font-medium shadow-[0_10px_40px_rgba(0,0,0,0.05)] focus:shadow-[0_20px_60px_rgba(0,0,0,0.1)] outline-none"
+                className="w-full h-full pl-16 pr-6 rounded-[2rem] border-2 border-slate-100 bg-white dark:bg-slate-950 focus:border-primary transition-all text-lg font-medium shadow-[0_10px_40px_rgba(0,0,0,0.05)] focus:shadow-[0_20px_60px_rgba(0,0,0,0.1)] outline-none"
             />
         </div>
     );

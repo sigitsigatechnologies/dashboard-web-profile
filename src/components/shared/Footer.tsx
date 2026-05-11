@@ -17,12 +17,12 @@ export async function Footer() {
     ];
 
     return (
-        <footer className="border-t bg-slate-50 pt-32 pb-16">
+        <footer className="border-t bg-slate-50 dark:bg-slate-900 pt-32 pb-16">
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 lg:grid-cols-4 gap-16 lg:gap-24">
                     <div className="col-span-1 lg:col-span-1">
                         <Link href="/" className="flex items-center space-x-4 group">
-                            <div className="bg-white p-3 rounded-2xl group-hover:scale-110 transition-transform shadow-sm border border-slate-100">
+                            <div className="bg-white dark:bg-slate-950 p-3 rounded-2xl group-hover:scale-110 transition-transform shadow-sm border border-slate-100 dark:border-slate-800">
                                 {profile?.logo ? (
                                     <Image
                                         src={getDirectImageUrl(profile.logo)}
@@ -36,40 +36,40 @@ export async function Footer() {
                                     <School className="h-10 w-10 text-primary" />
                                 )}
                             </div>
-                            <span className="text-3xl font-black tracking-tighter font-heading text-slate-900">
+                            <span className="text-3xl font-black tracking-tighter font-heading text-slate-900 dark:text-white">
                                 {profile?.schoolName || "EduCenter"}
                             </span>
                         </Link>
-                        <p className="mt-10 text-lg text-slate-500 leading-relaxed font-medium max-w-sm">
+                        <p className="mt-10 text-lg text-slate-500 dark:text-slate-400 leading-relaxed font-medium max-w-sm">
                             {profile?.vision || "Empowering the next generation with world-class education and values-driven learning experiences."}
                         </p>
                     </div>
                     <div>
                         <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-10">{t("nav.dashboard")}</h3>
                         <ul className="space-y-6">
-                            <li><Link href="/profile" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.facilities")}</Link></li>
-                            <li><Link href="/news" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.news")}</Link></li>
-                            <li><Link href="/agenda" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.agenda")}</Link></li>
-                            <li><Link href="/contact" className="text-base font-black text-slate-700 hover:text-primary transition-all font-heading tracking-tight">{t("nav.contact")}</Link></li>
+                            <li><Link href="/profile" className="text-base font-black text-slate-700 dark:text-slate-300 hover:text-primary transition-all font-heading tracking-tight">{t("nav.facilities")}</Link></li>
+                            <li><Link href="/news" className="text-base font-black text-slate-700 dark:text-slate-300 hover:text-primary transition-all font-heading tracking-tight">{t("nav.news")}</Link></li>
+                            <li><Link href="/agenda" className="text-base font-black text-slate-700 dark:text-slate-300 hover:text-primary transition-all font-heading tracking-tight">{t("nav.agenda")}</Link></li>
+                            <li><Link href="/contact" className="text-base font-black text-slate-700 dark:text-slate-300 hover:text-primary transition-all font-heading tracking-tight">{t("nav.contact")}</Link></li>
                         </ul>
                     </div>
                     <div>
                         <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-primary mb-10">{t("contact.info.title")}</h3>
                         <ul className="space-y-8">
-                            <li className="flex items-start space-x-5 text-base font-medium text-slate-500">
-                                <div className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-start space-x-5 text-base font-medium text-slate-500 dark:text-slate-400">
+                                <div className="bg-white dark:bg-slate-950 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
                                     <MapPin className="h-5 w-5 text-primary shrink-0" />
                                 </div>
                                 <span className="leading-relaxed">{profile?.address || "123 School Street, Education City"}</span>
                             </li>
-                            <li className="flex items-center space-x-5 text-base font-medium text-slate-500">
-                                <div className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-center space-x-5 text-base font-medium text-slate-500 dark:text-slate-400">
+                                <div className="bg-white dark:bg-slate-950 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
                                     <Phone className="h-5 w-5 text-primary shrink-0" />
                                 </div>
                                 <span>{profile?.phone || "+1 (234) 567-890"}</span>
                             </li>
-                            <li className="flex items-center space-x-5 text-base font-medium text-slate-500">
-                                <div className="bg-white p-2.5 rounded-xl border border-slate-100 shadow-sm">
+                            <li className="flex items-center space-x-5 text-base font-medium text-slate-500 dark:text-slate-400">
+                                <div className="bg-white dark:bg-slate-950 p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 shadow-sm">
                                     <Mail className="h-5 w-5 text-primary shrink-0" />
                                 </div>
                                 <span>{profile?.email || "info@educenter.sch.id"}</span>
@@ -87,7 +87,7 @@ export async function Footer() {
                                         href={social.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="p-4 rounded-2xl bg-white border border-slate-100 text-slate-600 hover:text-primary hover:border-primary/20 hover:shadow-xl hover:-translate-y-2 transition-all duration-500"
+                                        className="p-4 rounded-2xl bg-white dark:bg-slate-950 border border-slate-100 text-slate-600 dark:text-slate-400 hover:text-primary hover:border-primary/20 hover:shadow-xl hover:-translate-y-2 transition-all duration-500"
                                     >
                                         <Icon className="h-6 w-6" />
                                     </Link>
@@ -96,7 +96,7 @@ export async function Footer() {
                         </div>
                     </div>
                 </div>
-                <div className="mt-32 pt-12 border-t border-slate-200 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div className="mt-32 pt-12 border-t border-slate-200 dark:border-slate-700 flex flex-col md:flex-row justify-between items-center gap-8">
                     <p className="text-xs font-black text-slate-400 uppercase tracking-[0.3em]">
                         &copy; {new Date().getFullYear()} {profile?.schoolName || "EduCenter"}. {t("footer.rights")}.
                     </p>

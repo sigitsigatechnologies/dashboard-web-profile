@@ -32,9 +32,9 @@ export default async function NewsPage(props: {
     });
 
     return (
-        <div className="flex flex-col gap-32 pb-32 bg-white">
+        <div className="flex flex-col gap-32 pb-32 bg-white dark:bg-slate-950">
             {/* Page Header */}
-            <section className="relative pt-60 pb-32 overflow-hidden bg-slate-50">
+            <section className="relative pt-60 pb-32 overflow-hidden bg-slate-50 dark:bg-slate-900">
                 <div className="absolute inset-0 z-0">
                     <Image
                         src="https://images.unsplash.com/photo-1504173010664-32509aeebb62?auto=format&fit=crop&q=80&w=2000"
@@ -46,13 +46,13 @@ export default async function NewsPage(props: {
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-white/80 to-transparent" />
                 </div>
                 <div className="container mx-auto px-4 relative z-10 text-center">
-                    <div className="inline-block px-6 py-2 rounded-full bg-primary/10 border border-primary/20 text-slate-900 text-[10px] font-black uppercase tracking-[0.4em] mb-8 animate-fade-in">
+                    <div className="inline-block px-6 py-2 rounded-full bg-primary/10 border border-primary/20 text-slate-900 dark:text-white text-[10px] font-black uppercase tracking-[0.4em] mb-8 animate-fade-in">
                         {t("news.pageBadge")}
                     </div>
-                    <h1 className="text-6xl md:text-9xl font-black mb-8 tracking-tighter text-slate-900 leading-none">
+                    <h1 className="text-6xl md:text-9xl font-black mb-8 tracking-tighter text-slate-900 dark:text-white leading-none">
                         {t("news.pageHeadline")}
                     </h1>
-                    <p className="text-xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-medium leading-relaxed">
+                    <p className="text-xl md:text-3xl text-slate-600 dark:text-slate-400 max-w-4xl mx-auto font-medium leading-relaxed">
                         {t("news.pageSubheadline")}
                     </p>
                 </div>
@@ -64,15 +64,15 @@ export default async function NewsPage(props: {
                         <div className="inline-block px-6 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-black uppercase tracking-[0.4em] mb-8">
                             {t("news.archiveBadge")}
                         </div>
-                        <h2 className="text-5xl md:text-[6rem] font-black mb-6 tracking-tighter text-slate-900 leading-[0.9]">
+                        <h2 className="text-5xl md:text-[6rem] font-black mb-6 tracking-tighter text-slate-900 dark:text-white leading-[0.9]">
                             {t("news.exploreHeadline")}
                         </h2>
                     </div>
                     <div className="relative w-full md:w-96">
-                        <Suspense fallback={<div className="h-20 w-full animate-pulse bg-slate-100 rounded-3xl" />}>
+                        <Suspense fallback={<div className="h-20 w-full animate-pulse bg-slate-100 dark:bg-slate-800 rounded-3xl" />}>
                             <SearchInput 
                                 placeholder={t("news.searchPlaceholder")} 
-                                className="h-20 px-8 rounded-3xl border-slate-200 focus:border-primary shadow-sm" 
+                                className="h-20 px-8 rounded-3xl border-slate-200 dark:border-slate-700 focus:border-primary shadow-sm" 
                             />
                         </Suspense>
                     </div>
@@ -81,7 +81,7 @@ export default async function NewsPage(props: {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16">
                     {posts.map((post) => (
                         <Link key={post.id} href={`/news/${post.slug}`} className="group h-full">
-                            <article className="flex flex-col h-full bg-white rounded-[4.5rem] overflow-hidden border border-slate-100 shadow-xl hover:shadow-[0_40px_100px_rgba(0,0,0,0.08)] hover:-translate-y-4 transition-all duration-700">
+                            <article className="flex flex-col h-full bg-white dark:bg-slate-950 rounded-[4.5rem] overflow-hidden border border-slate-100 dark:border-slate-800 shadow-xl hover:shadow-[0_40px_100px_rgba(0,0,0,0.08)] hover:-translate-y-4 transition-all duration-700">
                                 <div className="relative h-80 w-full overflow-hidden">
                                     <Image
                                         src={getDirectImageUrl(post.featuredImage) || "https://images.unsplash.com/photo-1546410531-bb4caa6b424d?auto=format&fit=crop&q=80&w=800"}
@@ -91,7 +91,7 @@ export default async function NewsPage(props: {
                                         unoptimized
                                     />
                                     <div className="absolute top-8 left-8">
-                                        <span className="bg-white/95 backdrop-blur-md text-slate-900 text-[10px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl shadow-xl border border-white/50">
+                                        <span className="bg-white dark:bg-slate-950/95 backdrop-blur-md text-slate-900 dark:text-white text-[10px] font-black uppercase tracking-[0.3em] px-6 py-3 rounded-2xl shadow-xl border border-white/50">
                                             {post.category}
                                         </span>
                                     </div>
@@ -107,13 +107,13 @@ export default async function NewsPage(props: {
                                             <span>{post.author}</span>
                                         </div>
                                     </div>
-                                    <h3 className="text-3xl font-black mb-6 line-clamp-2 leading-tight group-hover:text-primary transition-colors text-slate-900">
+                                    <h3 className="text-3xl font-black mb-6 line-clamp-2 leading-tight group-hover:text-primary transition-colors text-slate-900 dark:text-white">
                                         {post.title}
                                     </h3>
-                                    <p className="text-slate-500 font-medium leading-relaxed text-lg line-clamp-3 mb-10 flex-1">
+                                    <p className="text-slate-500 dark:text-slate-400 font-medium leading-relaxed text-lg line-clamp-3 mb-10 flex-1">
                                         {post.content}
                                     </p>
-                                    <div className="flex items-center text-slate-900 font-black text-xs uppercase tracking-[0.3em] group-hover:text-primary transition-all">
+                                    <div className="flex items-center text-slate-900 dark:text-white font-black text-xs uppercase tracking-[0.3em] group-hover:text-primary transition-all">
                                         {t("news.readFull")} <ArrowRight className="h-6 w-6 ml-4 group-hover:translate-x-3 transition-transform" />
                                     </div>
                                 </div>
@@ -123,12 +123,12 @@ export default async function NewsPage(props: {
                 </div>
 
                 {posts.length === 0 && (
-                    <div className="text-center py-48 bg-slate-50 rounded-[5rem] border-2 border-dashed border-slate-200">
-                        <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-12 shadow-xl border border-slate-100">
+                    <div className="text-center py-48 bg-slate-50 dark:bg-slate-900 rounded-[5rem] border-2 border-dashed border-slate-200 dark:border-slate-700">
+                        <div className="w-24 h-24 bg-white dark:bg-slate-950 rounded-[2rem] flex items-center justify-center mx-auto mb-12 shadow-xl border border-slate-100 dark:border-slate-800">
                             <Search className="h-10 w-10 text-primary" />
                         </div>
-                        <h3 className="text-4xl font-black text-slate-900 mb-6 tracking-tighter">{t("news.noArticles")}</h3>
-                        <p className="text-slate-500 text-xl font-medium">{t("news.noArticlesSub")}</p>
+                        <h3 className="text-4xl font-black text-slate-900 dark:text-white mb-6 tracking-tighter">{t("news.noArticles")}</h3>
+                        <p className="text-slate-500 dark:text-slate-400 text-xl font-medium">{t("news.noArticlesSub")}</p>
                     </div>
                 )}
             </section>

@@ -55,7 +55,7 @@ export function HeroSlider({ images }: HeroSliderProps) {
                                 "h-1.5 rounded-full transition-all duration-500",
                                 index === currentIndex 
                                     ? "w-8 bg-primary" 
-                                    : "w-2 bg-white/40 hover:bg-white/60"
+                                    : "w-2 bg-white dark:bg-slate-950/40 hover:bg-white dark:bg-slate-950/60"
                             )}
                         />
                     ))}
