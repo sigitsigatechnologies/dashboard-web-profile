@@ -6,6 +6,8 @@ import { getDirectImageUrl, cn } from "@/lib/utils";
 import * as LucideIcons from "lucide-react";
 import { getServerTranslations } from "@/lib/i18n";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
     const { t } = await getServerTranslations();
     const profile: any = await prisma.schoolProfile.findFirst();

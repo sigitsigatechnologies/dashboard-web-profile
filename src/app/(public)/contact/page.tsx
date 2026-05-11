@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import { ContactForm } from "@/components/shared/ContactForm";
 import { getServerTranslations } from "@/lib/i18n";
 
+export const dynamic = "force-dynamic";
+
 export default async function ContactPage() {
     const { t } = await getServerTranslations();
     const profile = await prisma.schoolProfile.findFirst();

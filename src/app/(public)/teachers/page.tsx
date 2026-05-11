@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { getDirectImageUrl } from "@/lib/utils";
 import { getServerTranslations } from "@/lib/i18n";
 
+export const dynamic = "force-dynamic";
+
 export default async function TeachersPage() {
     const { t } = await getServerTranslations();
     const teachers = await prisma.teacher.findMany();
